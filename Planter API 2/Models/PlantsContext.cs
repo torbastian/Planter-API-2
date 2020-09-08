@@ -13,6 +13,11 @@ namespace Planter_API_2.Models
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             base.OnModelCreating(modelbuilder);
+
+            modelbuilder.Entity<Plants>()
+                .HasMany(p => p.Articles)
+                .WithOne(a => a.Plants)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         //DBsets

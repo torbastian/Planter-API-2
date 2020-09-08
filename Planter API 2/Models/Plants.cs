@@ -16,24 +16,25 @@ namespace Planter_API_2.Models
         //Foreign Keys
         public PlantType PlantType { get; set; }
         [ForeignKey("PlantType")]
-        public int PlantType_ID { get; set; }
+        public int FK_PlantTypeID { get; set; }
 
         public Climates Climates { get; set; }
         [ForeignKey("Climates")]
-        public int Climate_ID { get; set; }
+        public int FK_ClimateID { get; set; }
 
         public Users Users { get; set; }
         [ForeignKey("Users")]
-        public int UserID { get; set; }
+        public int FK_UserID { get; set; }
 
         public Edible Edible { get; set; }
         [ForeignKey("Edible")]
-        public int EdibleID { get; set; }
+        public int FK_EdibleID { get; set; }
 
         public ApprovedType ApprovedType { get; set; }
         [ForeignKey("ApprovedType")]
-        public int ApprovedTypeID { get; set; }
+        public int FK_ApprovedTypeID { get; set; }
 
+        public List<Article> Articles { get; set; }
         //Image Senere
     }
 }

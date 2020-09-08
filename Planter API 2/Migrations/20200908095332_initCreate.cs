@@ -2,7 +2,7 @@
 
 namespace Planter_API_2.Migrations
 {
-    public partial class InitCreate : Migration
+    public partial class initCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,14 +79,14 @@ namespace Planter_API_2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
-                    UserTypeID = table.Column<int>(nullable: false)
+                    FK_UserTypeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);
                     table.ForeignKey(
-                        name: "FK_Users_Usertypes_UserTypeID",
-                        column: x => x.UserTypeID,
+                        name: "FK_Users_Usertypes_FK_UserTypeID",
+                        column: x => x.FK_UserTypeID,
                         principalTable: "Usertypes",
                         principalColumn: "UserTypeID",
                         onDelete: ReferentialAction.Cascade);
@@ -99,42 +99,42 @@ namespace Planter_API_2.Migrations
                     PlantID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PlantName = table.Column<string>(nullable: true),
-                    PlantType_ID = table.Column<int>(nullable: false),
-                    Climate_ID = table.Column<int>(nullable: false),
-                    UserID = table.Column<int>(nullable: false),
-                    EdibleID = table.Column<int>(nullable: false),
-                    ApprovedTypeID = table.Column<int>(nullable: false)
+                    FK_PlantTypeID = table.Column<int>(nullable: false),
+                    FK_ClimateID = table.Column<int>(nullable: false),
+                    FK_UserID = table.Column<int>(nullable: false),
+                    FK_EdibleID = table.Column<int>(nullable: false),
+                    FK_ApprovedTypeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plants", x => x.PlantID);
                     table.ForeignKey(
-                        name: "FK_Plants_ApprovedTypes_ApprovedTypeID",
-                        column: x => x.ApprovedTypeID,
+                        name: "FK_Plants_ApprovedTypes_FK_ApprovedTypeID",
+                        column: x => x.FK_ApprovedTypeID,
                         principalTable: "ApprovedTypes",
                         principalColumn: "ApprovedTypeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Plants_Climates_Climate_ID",
-                        column: x => x.Climate_ID,
+                        name: "FK_Plants_Climates_FK_ClimateID",
+                        column: x => x.FK_ClimateID,
                         principalTable: "Climates",
                         principalColumn: "ClimateID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Plants_Edibles_EdibleID",
-                        column: x => x.EdibleID,
+                        name: "FK_Plants_Edibles_FK_EdibleID",
+                        column: x => x.FK_EdibleID,
                         principalTable: "Edibles",
                         principalColumn: "EdibleID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Plants_PlantTypes_PlantType_ID",
-                        column: x => x.PlantType_ID,
+                        name: "FK_Plants_PlantTypes_FK_PlantTypeID",
+                        column: x => x.FK_PlantTypeID,
                         principalTable: "PlantTypes",
                         principalColumn: "PlantTypeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Plants_Users_UserID",
-                        column: x => x.UserID,
+                        name: "FK_Plants_Users_FK_UserID",
+                        column: x => x.FK_UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
@@ -148,25 +148,23 @@ namespace Planter_API_2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(nullable: true),
                     Tips = table.Column<string>(nullable: true),
-                    ApprovedTypeID = table.Column<int>(nullable: false),
-                    PlantsPlantID = table.Column<int>(nullable: true),
-                    PlantID = table.Column<int>(nullable: false)
+                    FK_ApprovedTypeID = table.Column<int>(nullable: false),
+                    FK_PlantsID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Articles", x => x.ArticleID);
                     table.ForeignKey(
-                        name: "FK_Articles_ApprovedTypes_ApprovedTypeID",
-                        column: x => x.ApprovedTypeID,
+                        name: "FK_Articles_ApprovedTypes_FK_ApprovedTypeID",
+                        column: x => x.FK_ApprovedTypeID,
                         principalTable: "ApprovedTypes",
                         principalColumn: "ApprovedTypeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Articles_Plants_PlantsPlantID",
-                        column: x => x.PlantsPlantID,
+                        name: "FK_Articles_Plants_FK_PlantsID",
+                        column: x => x.FK_PlantsID,
                         principalTable: "Plants",
-                        principalColumn: "PlantID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "PlantID");
                 });
 
             migrationBuilder.CreateTable(
@@ -175,64 +173,64 @@ namespace Planter_API_2.Migrations
                 {
                     CommentID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ArticleID = table.Column<int>(nullable: false),
+                    FK_ArticleID = table.Column<int>(nullable: false),
                     Note = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.CommentID);
                     table.ForeignKey(
-                        name: "FK_Comments_Articles_ArticleID",
-                        column: x => x.ArticleID,
+                        name: "FK_Comments_Articles_FK_ArticleID",
+                        column: x => x.FK_ArticleID,
                         principalTable: "Articles",
                         principalColumn: "ArticleID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_ApprovedTypeID",
+                name: "IX_Articles_FK_ApprovedTypeID",
                 table: "Articles",
-                column: "ApprovedTypeID");
+                column: "FK_ApprovedTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_PlantsPlantID",
+                name: "IX_Articles_FK_PlantsID",
                 table: "Articles",
-                column: "PlantsPlantID");
+                column: "FK_PlantsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ArticleID",
+                name: "IX_Comments_FK_ArticleID",
                 table: "Comments",
-                column: "ArticleID");
+                column: "FK_ArticleID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_ApprovedTypeID",
+                name: "IX_Plants_FK_ApprovedTypeID",
                 table: "Plants",
-                column: "ApprovedTypeID");
+                column: "FK_ApprovedTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_Climate_ID",
+                name: "IX_Plants_FK_ClimateID",
                 table: "Plants",
-                column: "Climate_ID");
+                column: "FK_ClimateID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_EdibleID",
+                name: "IX_Plants_FK_EdibleID",
                 table: "Plants",
-                column: "EdibleID");
+                column: "FK_EdibleID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_PlantType_ID",
+                name: "IX_Plants_FK_PlantTypeID",
                 table: "Plants",
-                column: "PlantType_ID");
+                column: "FK_PlantTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_UserID",
+                name: "IX_Plants_FK_UserID",
                 table: "Plants",
-                column: "UserID");
+                column: "FK_UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_UserTypeID",
+                name: "IX_Users_FK_UserTypeID",
                 table: "Users",
-                column: "UserTypeID");
+                column: "FK_UserTypeID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

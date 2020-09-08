@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Planter_API_2.Models
 {
@@ -16,13 +17,13 @@ namespace Planter_API_2.Models
 
         //FK ApprovedTypeID
         public ApprovedType ApprovedType { get; set; }
-        [ForeignKey("ApprovedTypeID")]
-        public int ApprovedTypeID { get; set; }
+        [ForeignKey("ApprovedType")]
+        public int FK_ApprovedTypeID { get; set; }
 
         //FK PlantID
+        [ForeignKey("Plants")]
+        public int FK_PlantsID;
         public Plants Plants { get; set; }
-        [ForeignKey("PlantID")]
-        public int PlantID { get; set; }
 
         //Relationships
         //PK ArticleID(Article) TO FK_ArticleID(Comments)

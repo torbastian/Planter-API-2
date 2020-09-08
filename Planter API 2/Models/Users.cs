@@ -16,7 +16,7 @@ namespace Planter_API_2.Models
 
         public UserType UserType { get; set; }
         [ForeignKey("UserType")]
-        public int UserTypeID { get; set; }
+        public int FK_UserTypeID { get; set; }
 
         //Relationships
         public List<Plants> Plants { get; set; }

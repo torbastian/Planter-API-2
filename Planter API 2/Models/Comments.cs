@@ -14,7 +14,7 @@ namespace Planter_API_2.Models
 
         public Article Article { get; set; }
         [ForeignKey("Article")]
-        public int ArticleID { get; set; }
+        public int FK_ArticleID { get; set; }
 
         public string Note { get; set; }
     }
