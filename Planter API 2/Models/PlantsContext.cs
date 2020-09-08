@@ -8,6 +8,13 @@ namespace Planter_API_2.Models
 {
     public class PlantsContext : DbContext
     {
+        public PlantsContext(DbContextOptions<PlantsContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        {
+            base.OnModelCreating(modelbuilder);
+        }
+
         //DBsets
         public DbSet<ApprovedType> ApprovedTypes { get; set; }
         public DbSet<Article> Articles { get; set; }

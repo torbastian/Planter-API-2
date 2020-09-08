@@ -27,7 +27,8 @@ namespace Planter_API_2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = @"";
+            // Configure the Context to connect to database
+            var connectionString = @"Data Source=10.0.4.103,1433; Initial Catalog=Plants; User Id=PlantApi; Password=Passw0rd;";
             services.AddDbContext<PlantsContext>(g => g.UseSqlServer(connectionString));
             services.AddControllers();
         }
