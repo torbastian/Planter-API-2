@@ -12,7 +12,7 @@ namespace Planter_API_2.Migrations
                 {
                     ApprovedTypeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AType = table.Column<string>(nullable: true)
+                    AType = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,7 +25,7 @@ namespace Planter_API_2.Migrations
                 {
                     ClimateID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Climate = table.Column<string>(nullable: true)
+                    Climate = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,7 +38,7 @@ namespace Planter_API_2.Migrations
                 {
                     EdibleID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EdibleS = table.Column<string>(nullable: true)
+                    EdibleS = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,7 +51,7 @@ namespace Planter_API_2.Migrations
                 {
                     PlantTypeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PType = table.Column<string>(nullable: true)
+                    PType = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,7 +64,7 @@ namespace Planter_API_2.Migrations
                 {
                     UserTypeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UType = table.Column<string>(nullable: true)
+                    UType = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,8 +77,8 @@ namespace Planter_API_2.Migrations
                 {
                     UserID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
                     FK_UserTypeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -98,7 +98,7 @@ namespace Planter_API_2.Migrations
                 {
                     PlantID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlantName = table.Column<string>(nullable: true),
+                    PlantName = table.Column<string>(nullable: false),
                     FK_PlantTypeID = table.Column<int>(nullable: false),
                     FK_ClimateID = table.Column<int>(nullable: false),
                     FK_UserID = table.Column<int>(nullable: false),
@@ -148,21 +148,21 @@ namespace Planter_API_2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(nullable: true),
                     Tips = table.Column<string>(nullable: true),
-                    FK_ApprovedTypeID = table.Column<int>(nullable: false),
-                    FK_PlantsID = table.Column<int>(nullable: false)
+                    ApprovedTypeID = table.Column<int>(nullable: false),
+                    PlantsID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Articles", x => x.ArticleID);
                     table.ForeignKey(
-                        name: "FK_Articles_ApprovedTypes_FK_ApprovedTypeID",
-                        column: x => x.FK_ApprovedTypeID,
+                        name: "FK_Articles_ApprovedTypes_ApprovedTypeID",
+                        column: x => x.ApprovedTypeID,
                         principalTable: "ApprovedTypes",
                         principalColumn: "ApprovedTypeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Articles_Plants_FK_PlantsID",
-                        column: x => x.FK_PlantsID,
+                        name: "FK_Articles_Plants_PlantsID",
+                        column: x => x.PlantsID,
                         principalTable: "Plants",
                         principalColumn: "PlantID");
                 });
@@ -174,7 +174,7 @@ namespace Planter_API_2.Migrations
                     CommentID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FK_ArticleID = table.Column<int>(nullable: false),
-                    Note = table.Column<string>(nullable: true)
+                    Note = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,14 +188,14 @@ namespace Planter_API_2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_FK_ApprovedTypeID",
+                name: "IX_Articles_ApprovedTypeID",
                 table: "Articles",
-                column: "FK_ApprovedTypeID");
+                column: "ApprovedTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_FK_PlantsID",
+                name: "IX_Articles_PlantsID",
                 table: "Articles",
-                column: "FK_PlantsID");
+                column: "PlantsID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_FK_ArticleID",

@@ -41,14 +41,13 @@ namespace Planter_API_2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("FK_ApprovedTypeID")
+                    b.Property<int>("ApprovedTypeID")
                         .HasColumnType("int");
 
-                    b.Property<int>("FK_PlantsID")
+                    b.Property<int>("PlantsID")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tips")
@@ -56,9 +55,9 @@ namespace Planter_API_2.Migrations
 
                     b.HasKey("ArticleID");
 
-                    b.HasIndex("FK_ApprovedTypeID");
+                    b.HasIndex("ApprovedTypeID");
 
-                    b.HasIndex("FK_PlantsID");
+                    b.HasIndex("PlantsID");
 
                     b.ToTable("Articles");
                 });
@@ -218,13 +217,13 @@ namespace Planter_API_2.Migrations
                 {
                     b.HasOne("Planter_API_2.Models.ApprovedType", "ApprovedType")
                         .WithMany("Article")
-                        .HasForeignKey("FK_ApprovedTypeID")
+                        .HasForeignKey("ApprovedTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Planter_API_2.Models.Plants", "Plants")
                         .WithMany("Articles")
-                        .HasForeignKey("FK_PlantsID")
+                        .HasForeignKey("PlantsID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

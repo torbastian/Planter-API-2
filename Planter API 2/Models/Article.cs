@@ -10,25 +10,36 @@ namespace Planter_API_2.Models
 {
     public class Article
     {
-        [Key]
-        public int ArticleID { get; set; }//PK
-
-        [Required]
+        public int ArticleID { get; set; }
         public string Text { get; set; }
         public string Tips { get; set; }
 
-        //FK ApprovedTypeID
+        public int ApprovedTypeID { get; set; }
         public ApprovedType ApprovedType { get; set; }
-        [ForeignKey("ApprovedType")]
-        public int FK_ApprovedTypeID { get; set; }
 
-        //FK PlantID
-        [ForeignKey("Plants")]
-        public int FK_PlantsID;
+        public int PlantsID { get; set; }
         public Plants Plants { get; set; }
 
-        //Relationships
-        //PK ArticleID(Article) TO FK_ArticleID(Comments)
         public List<Comments> Comments { get; set; }
+        //[Key]
+        //public int ArticleID { get; set; }//PK
+
+        //[Required]
+        //public string Text { get; set; }
+        //public string Tips { get; set; }
+
+        ////FK ApprovedTypeID
+        //public ApprovedType ApprovedType { get; set; }
+        //[ForeignKey("ApprovedType")]
+        //public int FK_ApprovedTypeID { get; set; }
+
+        ////FK PlantID
+        //[ForeignKey("Plants")]
+        //public int FK_PlantsID;
+        //public Plants Plants { get; set; }
+
+        ////Relationships
+        ////PK ArticleID(Article) TO FK_ArticleID(Comments)
+        //public List<Comments> Comments { get; set; }
     }
 }
