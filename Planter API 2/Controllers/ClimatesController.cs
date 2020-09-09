@@ -20,14 +20,14 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/Climates
+        // GET: api/climates
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Climates>>> GetClimates()
         {
             return await _context.Climates.ToListAsync();
         }
 
-        // GET: api/Climates/5
+        // GET: api/climates/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Climates>> GetClimates(int id)
         {
@@ -41,7 +41,7 @@ namespace Planter_API_2.Controllers
             return climates;
         }
 
-        // PUT: api/Climates/5
+        // PUT: api/climates/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -73,7 +73,7 @@ namespace Planter_API_2.Controllers
             return NoContent();
         }
 
-        // POST: api/Climates
+        // POST: api/climates
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -85,7 +85,7 @@ namespace Planter_API_2.Controllers
             return CreatedAtAction("GetClimates", new { id = climates.ClimateID }, climates);
         }
 
-        // DELETE: api/Climates/5
+        // DELETE: api/climates/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Climates>> DeleteClimates(int id)
         {
