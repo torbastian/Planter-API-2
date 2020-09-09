@@ -10,6 +10,7 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int PlantTypeID { get; set; }
+        [Required]
         public string PType { get; set; }
 
         //Relationships

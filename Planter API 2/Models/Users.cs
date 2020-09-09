@@ -11,7 +11,9 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int UserID { get; set; }
+        [Required]
         public string Username { get; set; }
+        [Required]
         public string Password { get; set; }
 
         public UserType UserType { get; set; }

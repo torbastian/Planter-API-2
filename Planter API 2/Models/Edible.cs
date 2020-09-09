@@ -10,6 +10,8 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int EdibleID { get; set; }
+
+        [Required]
         public string EdibleS { get; set; }
 
         //Relationships

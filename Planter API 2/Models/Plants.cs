@@ -11,6 +11,7 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int PlantID { get; set; }
+        [Required]
         public string PlantName { get; set; }
 
         //Foreign Keys

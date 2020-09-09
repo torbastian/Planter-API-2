@@ -12,6 +12,8 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int ArticleID { get; set; }//PK
+
+        [Required]
         public string Text { get; set; }
         public string Tips { get; set; }
 

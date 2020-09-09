@@ -16,6 +16,7 @@ namespace Planter_API_2.Models
         [ForeignKey("Article")]
         public int FK_ArticleID { get; set; }
 
+        [Required]
         public string Note { get; set; }
     }
 }

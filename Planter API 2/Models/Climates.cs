@@ -11,6 +11,8 @@ namespace Planter_API_2.Models
     {
         [Key]
         public int ClimateID { get; set; }
+
+        [Required]
         public string Climate { get; set; }
 
         //Relationships 
