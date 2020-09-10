@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Planter_API_2.Migrations
 {
@@ -103,7 +104,8 @@ namespace Planter_API_2.Migrations
                     FK_ClimateID = table.Column<int>(nullable: false),
                     FK_UserID = table.Column<int>(nullable: false),
                     FK_EdibleID = table.Column<int>(nullable: false),
-                    FK_ApprovedTypeID = table.Column<int>(nullable: false)
+                    FK_ApprovedTypeID = table.Column<int>(nullable: false),
+                    Image = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -146,7 +148,7 @@ namespace Planter_API_2.Migrations
                 {
                     ArticleID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(nullable: true),
+                    Text = table.Column<string>(nullable: false),
                     Tips = table.Column<string>(nullable: true),
                     ApprovedTypeID = table.Column<int>(nullable: false),
                     PlantsID = table.Column<int>(nullable: false)
@@ -174,6 +176,7 @@ namespace Planter_API_2.Migrations
                     CommentID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FK_ArticleID = table.Column<int>(nullable: false),
+                    FK_UserID = table.Column<int>(nullable: false),
                     Note = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -184,6 +187,12 @@ namespace Planter_API_2.Migrations
                         column: x => x.FK_ArticleID,
                         principalTable: "Articles",
                         principalColumn: "ArticleID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Users_FK_UserID",
+                        column: x => x.FK_UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -201,6 +210,11 @@ namespace Planter_API_2.Migrations
                 name: "IX_Comments_FK_ArticleID",
                 table: "Comments",
                 column: "FK_ArticleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_FK_UserID",
+                table: "Comments",
+                column: "FK_UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Plants_FK_ApprovedTypeID",

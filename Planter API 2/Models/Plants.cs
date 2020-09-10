@@ -35,6 +35,8 @@ namespace Planter_API_2.Models
         [ForeignKey("ApprovedType")]
         public int FK_ApprovedTypeID { get; set; }
 
+        public byte[] Image { get; set; }
+
         public List<Article> Articles { get; set; }
         //Image Senere
     }

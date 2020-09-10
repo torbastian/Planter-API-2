@@ -22,5 +22,7 @@ namespace Planter_API_2.Models
 
         //Relationships
         public List<Plants> Plants { get; set; }
+
+        public List<Comments> Comments { get; set; }
     }
 }

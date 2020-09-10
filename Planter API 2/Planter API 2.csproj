@@ -52,6 +52,14 @@
     <Compile Remove="Migrations\20200909071545_articleTest.Designer.cs" />
     <Compile Remove="Migrations\20200909071928_initCreate.cs" />
     <Compile Remove="Migrations\20200909071928_initCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200909072027_initCreate.cs" />
+    <Compile Remove="Migrations\20200909072027_initCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200909072844_notNull.cs" />
+    <Compile Remove="Migrations\20200909072844_notNull.Designer.cs" />
+    <Compile Remove="Migrations\20200910054323_PlantsImage.cs" />
+    <Compile Remove="Migrations\20200910054323_PlantsImage.Designer.cs" />
+    <Compile Remove="Migrations\20200910100116_CommentUsers.cs" />
+    <Compile Remove="Migrations\20200910100116_CommentUsers.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

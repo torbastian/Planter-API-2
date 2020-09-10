@@ -16,6 +16,10 @@ namespace Planter_API_2.Models
         [ForeignKey("Article")]
         public int FK_ArticleID { get; set; }
 
+        public Users Users { get; set; }
+        [ForeignKey("Users")]
+        public int FK_UserID { get; set; }
+
         [Required]
         public string Note { get; set; }
     }
