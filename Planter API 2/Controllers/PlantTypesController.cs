@@ -43,15 +43,17 @@ namespace Planter_API_2.Controllers
 
         // GET: api/planttypes
         [HttpGet]
-        public IQueryable<PlantTypeDto> GetPlantTypeDtos()
+        public async Task<ActionResult<IEnumerable<PlantTypeDto>>> GetPlantTypeDtos()
         {
-            IQueryable<PlantTypeDto> plantType = _context.PlantTypes.Select(p => new PlantTypeDto()
+            var query = _context.PlantTypes.Select(p => new PlantTypeDto()
             {
                 id = p.PlantTypeID,
                 info = p.PType
             });
 
-            return plantType;
+            var plantTypes = await query.ToListAsync();
+
+            return plantTypes;
         }
 
         // GET: api/planttypes/5

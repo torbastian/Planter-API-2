@@ -43,13 +43,15 @@ namespace Planter_API_2.Controllers
 
         // GET: api/edible
         [HttpGet]
-        public IQueryable<EdibleDto> GetEdibleDto()
+        public async Task<ActionResult<IEnumerable<EdibleDto>>> GetEdibleDto()
         {
-            IQueryable<EdibleDto> edibles = _context.Edibles.Select(e => new EdibleDto()
+            var query = _context.Edibles.Select(e => new EdibleDto()
             {
                 id = e.EdibleID,
                 info = e.EdibleS
             });
+
+            var edibles = await query.ToListAsync();
 
             return edibles;
         }

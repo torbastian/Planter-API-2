@@ -43,13 +43,15 @@ namespace Planter_API_2.Controllers
 
         // GET: api/approvedtypes
         [HttpGet]
-        public IQueryable<ApprovedTypeDto> GetApprovedTypeDtos()
+        public async Task<ActionResult<IEnumerable<ApprovedTypeDto>>> GetApprovedTypeDtos()
         {
-            IQueryable<ApprovedTypeDto> approvedTypes = _context.ApprovedTypes.Select(at => new ApprovedTypeDto()
+            var query = _context.ApprovedTypes.Select(at => new ApprovedTypeDto()
             {
                 id = at.ApprovedTypeID,
                 info = at.AType
             });
+
+            var approvedTypes = await query.ToListAsync();
 
             return approvedTypes;
         }

@@ -43,13 +43,15 @@ namespace Planter_API_2.Controllers
 
         // GET: api/usertype
         [HttpGet]
-        public IQueryable<UserTypeDto> GetUserTypeDtos()
+        public async Task<ActionResult<IEnumerable<UserTypeDto>>> GetUserTypeDto()
         {
-            IQueryable<UserTypeDto> userTypes = _context.Usertypes.Select(u => new UserTypeDto()
+            var query = _context.Usertypes.Select(u => new UserTypeDto()
             {
                 id = u.UserTypeID,
                 type = u.UType
             });
+
+            var userTypes = await query.ToListAsync();
 
             return userTypes;
         }

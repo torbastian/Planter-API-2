@@ -43,16 +43,17 @@ namespace Planter_API_2.Controllers
 
         // GET: api/climates
         [HttpGet]
-        public IQueryable<ClimatesDto> GetClimatesDto()
+        public async Task<ActionResult<IEnumerable<ClimatesDto>>> GetClimatesDto()
         {
-            IQueryable<ClimatesDto> climates = _context.Climates.Select(c => new ClimatesDto()
+            var query = _context.Climates.Select(c => new ClimatesDto()
             {
                 id = c.ClimateID,
                 info = c.Climate
             });
 
+            var climates = await query.ToListAsync();
+
             return climates;
-            //return await _context.Climates.ToListAsync();
         }
 
         // GET: api/climates/5
