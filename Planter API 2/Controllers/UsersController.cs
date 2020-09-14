@@ -21,14 +21,14 @@ namespace Planter_API_2.Controllers
         }
 
         // GET: api/users
-        [HttpGet]
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
         // GET: api/users/5
-        [HttpGet("{id}")]
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Users>> GetUsers(int id)
         {
             var users = await _context.Users.FindAsync(id);
