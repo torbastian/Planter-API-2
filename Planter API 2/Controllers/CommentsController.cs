@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/comments
-        [HttpGet]
+        // GET: api/comments/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Comments>>> GetComments()
         {
             return await _context.Comments.ToListAsync();
         }
 
         // GET: api/comments/5
-        [HttpGet("{id}")]
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Comments>> GetComments(int id)
         {
             var comments = await _context.Comments.FindAsync(id);
@@ -39,6 +39,31 @@ namespace Planter_API_2.Controllers
             }
 
             return comments;
+        }
+
+        [HttpGet]
+        public ActionResult GetCommentsDto()
+        {
+            return NotFound();
+        }
+
+        // GET: api/comments/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<CommentsDto>>> GetCommentsByArticleId(int id)
+        {
+            //Get a comment based on the article id
+            var query = _context.Comments.Where(c => c.CommentID == id)
+                .Include(c => c.Users)
+                .Select(c => new CommentsDto
+                {
+                    id = c.CommentID,
+                    info = c.Note,
+                    username = c.Users.Username
+                });
+
+            var commentList = await query.ToListAsync();
+
+            return commentList;
         }
 
         // PUT: api/comments/5

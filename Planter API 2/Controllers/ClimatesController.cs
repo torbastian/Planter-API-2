@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/climates
-        [HttpGet]
+        // GET: api/climates/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Climates>>> GetClimates()
         {
             return await _context.Climates.ToListAsync();
         }
 
-        // GET: api/climates/5
-        [HttpGet("{id}")]
+        // GET: api/climates/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Climates>> GetClimates(int id)
         {
             var climates = await _context.Climates.FindAsync(id);
@@ -40,6 +40,35 @@ namespace Planter_API_2.Controllers
 
             return climates;
         }
+
+        // GET: api/climates
+        [HttpGet]
+        public IQueryable<ClimatesDto> GetClimatesDto()
+        {
+            IQueryable<ClimatesDto> climates = _context.Climates.Select(c => new ClimatesDto()
+            {
+                id = c.ClimateID,
+                info = c.Climate
+            });
+
+            return climates;
+            //return await _context.Climates.ToListAsync();
+        }
+
+        // GET: api/climates/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClimatesDto>> GetClimatesDtoId(int id)
+        {
+            var climates = await _context.Climates.FindAsync(id);
+
+            if (climates == null)
+            {
+                return NotFound();
+            }
+
+            return new ClimatesDto() { id = climates.ClimateID, info = climates.Climate };
+        }
+
 
         // PUT: api/climates/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

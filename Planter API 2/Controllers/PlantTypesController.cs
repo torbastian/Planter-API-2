@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/planttypes
-        [HttpGet]
+        // GET: api/planttypes/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<PlantType>>> GetPlantTypes()
         {
             return await _context.PlantTypes.ToListAsync();
         }
 
-        // GET: api/planttypes/5
-        [HttpGet("{id}")]
+        // GET: api/planttypes/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<PlantType>> GetPlantType(int id)
         {
             var plantType = await _context.PlantTypes.FindAsync(id);
@@ -39,6 +39,33 @@ namespace Planter_API_2.Controllers
             }
 
             return plantType;
+        }
+
+        // GET: api/planttypes
+        [HttpGet]
+        public IQueryable<PlantTypeDto> GetPlantTypeDtos()
+        {
+            IQueryable<PlantTypeDto> plantType = _context.PlantTypes.Select(p => new PlantTypeDto()
+            {
+                id = p.PlantTypeID,
+                info = p.PType
+            });
+
+            return plantType;
+        }
+
+        // GET: api/planttypes/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PlantTypeDto>> GetPlantTypeDtoId(int id)
+        {
+            var plantType = await _context.PlantTypes.FindAsync(id);
+
+            if (plantType == null)
+            {
+                return NotFound();
+            }
+
+            return new PlantTypeDto() { id = plantType.PlantTypeID, info = plantType.PType };
         }
 
         // PUT: api/planttypes/5

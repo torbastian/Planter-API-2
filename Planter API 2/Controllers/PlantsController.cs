@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: apiplants
-        [HttpGet]
+        // GET: api/plants/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Plants>>> GetPlants()
         {
             return await _context.Plants.ToListAsync();
         }
 
-        // GET: api/plants/5
-        [HttpGet("{id}")]
+        // GET: api/plants/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Plants>> GetPlants(int id)
         {
             var plants = await _context.Plants.FindAsync(id);
@@ -39,6 +39,65 @@ namespace Planter_API_2.Controllers
             }
 
             return plants;
+        }
+
+        // GET: api/plants
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsDto()
+        {
+            var query = _context.Plants
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType,
+                    image = p.Image
+                });
+
+            var plantList = await query.ToListAsync();
+
+            return plantList;
+        }
+
+        // GET: api/plants/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PlantsDto>> GetPlantsDto(int id)
+        {
+            var query = _context.Plants.Where(p => p.PlantID == id)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType,
+                    image = p.Image
+                });
+
+            var plant = await query.FirstOrDefaultAsync();
+
+            if (plant == null)
+            {
+                return NotFound();
+            }
+
+            return plant;
         }
 
         // PUT: api/plants/5

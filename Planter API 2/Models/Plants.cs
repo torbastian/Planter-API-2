@@ -40,4 +40,17 @@ namespace Planter_API_2.Models
         public List<Article> Articles { get; set; }
         //Image Senere
     }
+
+    [NotMapped]
+    public class PlantsDto
+    {
+        public int id { get; set; }
+        public string info { get; set; }
+        public string type { get; set; }
+        public string climate { get; set; }
+        public string edible { get; set; }
+        public string username { get; set; }
+        public string approved { get; set; }
+        public byte[] image { get; set; }
+    }
 }

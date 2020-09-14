@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/usertypes
-        [HttpGet]
+        // GET: api/usertypes/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<UserType>>> GetUsertypes()
         {
             return await _context.Usertypes.ToListAsync();
         }
 
-        // GET: api/usertypes/5
-        [HttpGet("{id}")]
+        // GET: api/usertypes/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<UserType>> GetUserType(int id)
         {
             var userType = await _context.Usertypes.FindAsync(id);
@@ -39,6 +39,33 @@ namespace Planter_API_2.Controllers
             }
 
             return userType;
+        }
+
+        // GET: api/usertype
+        [HttpGet]
+        public IQueryable<UserTypeDto> GetUserTypeDtos()
+        {
+            IQueryable<UserTypeDto> userTypes = _context.Usertypes.Select(u => new UserTypeDto()
+            {
+                id = u.UserTypeID,
+                type = u.UType
+            });
+
+            return userTypes;
+        }
+
+        // GET: api/usertype/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserTypeDto>> GetUserTypeDtoId(int id)
+        {
+            var userType = await _context.Usertypes.FindAsync(id);
+
+            if (userType == null)
+            {
+                return NotFound();
+            }
+
+            return new UserTypeDto() { id = userType.UserTypeID, type = userType.UType };
         }
 
         // PUT: api/usertypes/5

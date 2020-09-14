@@ -21,14 +21,14 @@ namespace Planter_API_2.Controllers
         }
 
         // GET: api/edible
-        [HttpGet]
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Edible>>> GetEdibles()
         {
             return await _context.Edibles.ToListAsync();
         }
 
         // GET: api/edible/5
-        [HttpGet("{id}")]
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Edible>> GetEdible(int id)
         {
             var edible = await _context.Edibles.FindAsync(id);
@@ -39,6 +39,33 @@ namespace Planter_API_2.Controllers
             }
 
             return edible;
+        }
+
+        // GET: api/edible
+        [HttpGet]
+        public IQueryable<EdibleDto> GetEdibleDto()
+        {
+            IQueryable<EdibleDto> edibles = _context.Edibles.Select(e => new EdibleDto()
+            {
+                id = e.EdibleID,
+                info = e.EdibleS
+            });
+
+            return edibles;
+        }
+
+        // GET: api/edible/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EdibleDto>> GetEdibleDtoId(int id)
+        {
+            var edible = await _context.Edibles.FindAsync(id);
+
+            if (edible == null)
+            {
+                return NotFound();
+            }
+
+            return new EdibleDto() { id = edible.EdibleID, info = edible.EdibleS};
         }
 
         // PUT: api/edible/5

@@ -24,4 +24,14 @@ namespace Planter_API_2.Models
 
         public List<Comments> Comments { get; set; }
     }
+
+    [NotMapped]
+    public class ArticleDto
+    {
+        public int id { get; set; }
+        public int plantId { get; set; }
+        public string approved { get; set; }
+        public string text { get; set; }
+        public string tips { get; set; }
+    }
 }

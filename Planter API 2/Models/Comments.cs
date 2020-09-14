@@ -23,4 +23,12 @@ namespace Planter_API_2.Models
         [Required]
         public string Note { get; set; }
     }
+
+    [NotMapped]
+    public class CommentsDto
+    {
+        public int id { get; set; }
+        public string info { get; set; }
+        public string username { get; set; }
+    }
 }

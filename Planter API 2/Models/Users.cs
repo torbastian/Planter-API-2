@@ -25,4 +25,12 @@ namespace Planter_API_2.Models
 
         public List<Comments> Comments { get; set; }
     }
+
+    [NotMapped]
+    public class UsersDto
+    {
+        public int id { get; set; }
+        public string username { get; set; }
+        public string type { get; set; }
+    }
 }

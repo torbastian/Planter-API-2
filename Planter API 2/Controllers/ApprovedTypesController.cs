@@ -20,15 +20,15 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/approvedtypes
-        [HttpGet]
+        // GET: api/approvedtypes/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<ApprovedType>>> GetApprovedTypes()
         {
             return await _context.ApprovedTypes.ToListAsync();
         }
 
-        // GET: api/approvedtypes/5
-        [HttpGet("{id}")]
+        // GET: api/approvedtypes/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<ApprovedType>> GetApprovedType(int id)
         {
             var approvedType = await _context.ApprovedTypes.FindAsync(id);
@@ -39,6 +39,33 @@ namespace Planter_API_2.Controllers
             }
 
             return approvedType;
+        }
+
+        // GET: api/approvedtypes
+        [HttpGet]
+        public IQueryable<ApprovedTypeDto> GetApprovedTypeDtos()
+        {
+            IQueryable<ApprovedTypeDto> approvedTypes = _context.ApprovedTypes.Select(at => new ApprovedTypeDto()
+            {
+                id = at.ApprovedTypeID,
+                info = at.AType
+            });
+
+            return approvedTypes;
+        }
+
+        // GET: api/approvedtypes/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApprovedTypeDto>> GetApprovedTypeDtoID(int id)
+        {
+            var approvedType = await _context.ApprovedTypes.FindAsync(id);
+
+            if (approvedType == null)
+            {
+                return NotFound();
+            }
+
+            return new ApprovedTypeDto() { id = approvedType.ApprovedTypeID, info = approvedType.AType };
         }
 
         // PUT: api/approvedtypes/5

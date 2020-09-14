@@ -20,18 +20,65 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
-        // GET: api/articles
-        [HttpGet]
+        // GET: api/articles/full
+        [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
         {
             return await _context.Articles.ToListAsync();
         }
 
-        // GET: api/articles/5
-        [HttpGet("{id}")]
+        // GET: api/articles/full/5
+        [HttpGet("full/{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)
         {
             var article = await _context.Articles.FindAsync(id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            return article;
+        }
+
+        // GET: api/articles
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetArticleDto()
+        {
+            //Get Article and the string value of the approvedtype
+            var aatJoin = await _context.Articles
+                .Join(_context.ApprovedTypes,
+                A => A.ApprovedTypeID,
+                AT => AT.ApprovedTypeID,
+                (A, AT) => new ArticleDto
+                {
+                    id = A.ArticleID,
+                    plantId = A.PlantsID,
+                    approved = AT.AType,
+                    text = A.Text,
+                    tips = A.Tips
+                }).ToListAsync();
+
+            return aatJoin;
+        }
+
+        // GET: api/articles/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ArticleDto>> GetArticleDtoId(int id)
+        {
+            //Get Article and the string value of the approvedtype where article id matches provided id
+            var article = await _context.Articles.Where(a => a.ArticleID == id)
+                .Join(_context.ApprovedTypes,
+                A => A.ApprovedTypeID,
+                AT => AT.ApprovedTypeID,
+                (A, AT) => new ArticleDto
+                {
+                    id = A.ArticleID,
+                    plantId = A.PlantsID,
+                    approved = AT.AType,
+                    text = A.Text,
+                    tips = A.Tips
+                }).FirstOrDefaultAsync();
 
             if (article == null)
             {

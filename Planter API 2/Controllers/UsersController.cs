@@ -41,6 +41,45 @@ namespace Planter_API_2.Controllers
             return users;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UsersDto>>> GetUsersDto()
+        {
+            var query = _context.Users
+                .Include(u => u.UserType)
+                .Select(u => new UsersDto
+                {
+                    id = u.UserID,
+                    username = u.Username,
+                    type = u.UserType.UType
+                });
+
+            var userList = await query.ToListAsync();
+
+            return userList;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsersDto>> GetUsersDtoId(int id)
+        {
+            var query = _context.Users.Where( u => u.UserID == id)
+                .Include(u => u.UserType)
+                .Select(u => new UsersDto
+                {
+                    id = u.UserID,
+                    username = u.Username,
+                    type = u.UserType.UType
+                });
+
+            var user = await query.FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
         // PUT: api/users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

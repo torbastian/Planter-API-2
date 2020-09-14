@@ -18,4 +18,11 @@ namespace Planter_API_2.Models
         //Relationships 
         public List<Plants> Plants { get; set; }
     }
+
+    [NotMapped]
+    public class ClimatesDto
+    {
+        public int id { get; set; }
+        public string info { get; set; }
+    }
 }
