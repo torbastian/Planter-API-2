@@ -51,6 +51,6 @@ namespace Planter_API_2.Models
         public string edible { get; set; }
         public string username { get; set; }
         public string approved { get; set; }
-        public byte[] image { get; set; }
+        public string image { get; set; }
     }
 }

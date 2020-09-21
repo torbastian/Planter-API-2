@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,7 @@ namespace Planter_API_2.Controllers
         }
 
         // GET: api/plants
+        // OBS! Returns PlantsDto WITHOUT AN IMAGE, To get an image Use the GetPlantImage method
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsDto()
         {
@@ -59,8 +61,7 @@ namespace Planter_API_2.Controllers
                     climate = p.Climates.Climate,
                     edible = p.Edible.EdibleS,
                     username = p.Users.Username,
-                    approved = p.ApprovedType.AType,
-                    image = p.Image
+                    approved = p.ApprovedType.AType
                 });
 
             var plantList = await query.ToListAsync();
@@ -69,6 +70,7 @@ namespace Planter_API_2.Controllers
         }
 
         // GET: api/plants/5
+        // OBS! Returns PlantsDTO WITHOUT AN IMAGE, To get an image Use the GetPlantImage method
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantsDto>> GetPlantsDto(int id)
         {
@@ -86,8 +88,7 @@ namespace Planter_API_2.Controllers
                     climate = p.Climates.Climate,
                     edible = p.Edible.EdibleS,
                     username = p.Users.Username,
-                    approved = p.ApprovedType.AType,
-                    image = p.Image
+                    approved = p.ApprovedType.AType
                 });
 
             var plant = await query.FirstOrDefaultAsync();
@@ -132,6 +133,43 @@ namespace Planter_API_2.Controllers
             return NoContent();
         }
 
+        [HttpGet("image/{id}")]
+        public async Task<ActionResult<imagePlant>> GetPlantImage(int id)
+        {
+            var plant = await _context.Plants.Where(p => p.PlantID == id).FirstOrDefaultAsync();
+
+            if (plant == null)
+            {
+                return NotFound();
+            }
+
+            imagePlant rPlant = new imagePlant()
+            {
+                id = id,
+                image = Convert.ToBase64String(plant.Image)
+            };
+
+            return rPlant;
+        }
+
+        [HttpPut("image/{id}")]
+        public async Task<IActionResult> PutPlantImage(int id, imagePlant iPlant)
+        {
+            var plant = _context.Plants.Where(p => p.PlantID == id).FirstOrDefault();
+
+            if (plant == null || iPlant == null)
+            {
+                return BadRequest();
+            }
+
+            byte[] byteImage = Convert.FromBase64String(iPlant.image);
+
+            plant.Image = byteImage;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         // POST: api/plants
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -165,4 +203,10 @@ namespace Planter_API_2.Controllers
             return _context.Plants.Any(e => e.PlantID == id);
         }
     }
+}
+
+public class imagePlant
+{
+    public int id { get; set; }
+    public string image { get; set; }
 }
