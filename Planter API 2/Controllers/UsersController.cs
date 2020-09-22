@@ -61,7 +61,7 @@ namespace Planter_API_2.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UsersDto>> GetUsersDtoId(int id)
         {
-            var query = _context.Users.Where( u => u.UserID == id)
+            var query = _context.Users.Where(u => u.UserID == id)
                 .Include(u => u.UserType)
                 .Select(u => new UsersDto
                 {
@@ -78,6 +78,18 @@ namespace Planter_API_2.Controllers
             }
 
             return user;
+        }
+
+        //HttpPost
+        [HttpPost("{/authenticate}")]
+        public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto user)
+        {
+            //Recives User with only Username and Password Values
+            //Get the user that matches these and return it
+
+            //Return the user
+            return null;
+            //The website then stores this user locally, so that they can stay signed in
         }
 
         // PUT: api/users/5
