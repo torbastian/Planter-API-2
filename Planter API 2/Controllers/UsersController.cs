@@ -81,7 +81,7 @@ namespace Planter_API_2.Controllers
         }
 
         //HttpPost
-        [HttpPost("{/authenticate}")]
+        [HttpPost("/authenticate")]
         public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto user)
         {
             //Recives User with only Username and Password Values
