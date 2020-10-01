@@ -85,10 +85,23 @@ namespace Planter_API_2.Controllers
         public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto user)
         {
             //Recives User with only Username and Password Values
+            var query = _context.Users
+                .Include(u => u.UserType)
+                .Select(u => new UsersDto
+                {
+                    id = u.UserID,
+                    password = u.Password,
+                    type = u.UserType.UType
+                });
             //Get the user that matches these and return it
+            var login = await query.FirstOrDefaultAsync();
 
+            if (login == null)
+            {
+                return NotFound();
+            }
             //Return the user
-            return null;
+            return login;
             //The website then stores this user locally, so that they can stay signed in
         }
 
