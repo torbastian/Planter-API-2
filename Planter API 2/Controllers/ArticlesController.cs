@@ -88,6 +88,24 @@ namespace Planter_API_2.Controllers
             return article;
         }
 
+        [HttpGet("plant/{id}")]
+        public async Task<ActionResult<ArticleDto>> GetArticleByPlantId(int id)
+        {
+            var query = _context.Articles.Where(a => a.PlantsID == id)
+                .Include(a => a.ApprovedType)
+                .Select(a => new ArticleDto
+                {
+                    id = a.ArticleID,
+                    plantId = a.PlantsID,
+                    approved = a.ApprovedType.AType,
+                    text = a.Text,
+                    tips = a.Tips
+                });
+
+            var article = await query.FirstOrDefaultAsync();
+            return article;
+        }
+
         // PUT: api/articles/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
