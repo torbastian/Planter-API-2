@@ -101,6 +101,58 @@ namespace Planter_API_2.Controllers
             return plant;
         }
 
+        // GET: api/plants/type/id
+        [HttpGet("type/{id}")]
+        public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsbyType(int id)
+        {
+            var query = _context.Plants.Where(p => p.FK_PlantTypeID == id)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType
+                });
+
+            var plantList = await query.ToListAsync();
+
+            return plantList;
+        }
+
+        // GET: api/plants/climate/id
+        [HttpGet("climate/{id}")]
+        public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByClimate(int id)
+        {
+            var query = _context.Plants.Where(p => p.FK_ClimateID == id)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType
+                });
+
+            var plantList = await query.ToListAsync();
+
+            return plantList;
+        }
+
         // PUT: api/plants/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
