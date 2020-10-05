@@ -153,6 +153,32 @@ namespace Planter_API_2.Controllers
             return plantList;
         }
 
+        [HttpGet("latest")]
+        public async Task<ActionResult<PlantsDto>> GetLatestPlant()
+        {
+            var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == 1)
+                .OrderByDescending(p => p.PlantID)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType
+                });
+
+            PlantsDto plant = await query.FirstOrDefaultAsync();
+
+            return plant;
+        }
+
         // PUT: api/plants/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
