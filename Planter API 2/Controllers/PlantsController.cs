@@ -47,7 +47,7 @@ namespace Planter_API_2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsDto()
         {
-            var query = _context.Plants
+            var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
                 .Include(p => p.Edible)
@@ -105,7 +105,7 @@ namespace Planter_API_2.Controllers
         [HttpGet("type/{id}")]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsbyType(int id)
         {
-            var query = _context.Plants.Where(p => p.FK_PlantTypeID == id)
+            var query = _context.Plants.Where(p => p.FK_PlantTypeID == id && p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
                 .Include(p => p.Edible)
@@ -131,7 +131,7 @@ namespace Planter_API_2.Controllers
         [HttpGet("climate/{id}")]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByClimate(int id)
         {
-            var query = _context.Plants.Where(p => p.FK_ClimateID == id)
+            var query = _context.Plants.Where(p => p.FK_ClimateID == id && p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
                 .Include(p => p.Edible)
@@ -153,6 +153,7 @@ namespace Planter_API_2.Controllers
             return plantList;
         }
 
+        // GET: api/plants/latest
         [HttpGet("latest")]
         public async Task<ActionResult<PlantsDto>> GetLatestPlant()
         {
@@ -178,6 +179,49 @@ namespace Planter_API_2.Controllers
 
             return plant;
         }
+
+        // GET: api/plants/approval/1
+        [HttpGet("approval/{approvalType}")]
+        public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByApproval(int approvalType)
+        {
+            var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == approvalType)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType
+                });
+
+            var plants = await query.ToListAsync();
+
+            return plants;
+        }
+
+        // PUT: api/plants/1/1
+
+        [HttpPut("approval/{id}/{approvalType}")]
+        public async Task<IActionResult> ApproveOrDisapprovePlant(int id, int approvalType)
+        {
+            var result = _context.Plants.SingleOrDefault(p => p.PlantID == id);
+
+            if (result != null)
+            {
+                result.FK_ApprovedTypeID = approvalType;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return NotFound();
+        } 
 
         // PUT: api/plants/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
