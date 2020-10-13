@@ -23,14 +23,14 @@ namespace Planter_API_2.Controllers
         // GET: api/planttypes/full
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<PlantType>>> GetPlantTypes()
-        {
+        {   //get everything from plant types
             return await _context.PlantTypes.ToListAsync();
         }
 
         // GET: api/planttypes/full/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<PlantType>> GetPlantType(int id)
-        {
+        {   //get everything from plant types at the id
             var plantType = await _context.PlantTypes.FindAsync(id);
 
             if (plantType == null)
@@ -44,7 +44,7 @@ namespace Planter_API_2.Controllers
         // GET: api/planttypes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantTypeDto>>> GetPlantTypeDtos()
-        {
+        {   //Get all plant type DTO
             var query = _context.PlantTypes.Select(p => new PlantTypeDto()
             {
                 id = p.PlantTypeID,
@@ -59,7 +59,7 @@ namespace Planter_API_2.Controllers
         // GET: api/planttypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantTypeDto>> GetPlantTypeDtoId(int id)
-        {
+        {   //Get the plant type DTO at the id
             var plantType = await _context.PlantTypes.FindAsync(id);
 
             if (plantType == null)
@@ -74,50 +74,39 @@ namespace Planter_API_2.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlantType(int id, PlantType plantType)
-        {
-            if (id != plantType.PlantTypeID)
-            {
-                return BadRequest();
-            }
+        public async Task<IActionResult> PutPlantType(int id, PlantTypeDto plantType)
+        {   //Update the plant type 
+            var result = await _context.PlantTypes.SingleOrDefaultAsync(t => t.PlantTypeID == id);
 
-            _context.Entry(plantType).State = EntityState.Modified;
-
-            try
+            if (result != null)
             {
+                result.PType = plantType.info;
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlantTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok();
             }
 
-            return NoContent();
+            return NotFound();
         }
 
         // POST: api/planttypes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<PlantType>> PostPlantType(PlantType plantType)
-        {
-            _context.PlantTypes.Add(plantType);
+        public async Task<ActionResult<PlantType>> PostPlantType(PlantTypeDto plantType)
+        {   //Create a new plant type based on the provided plant type DTO
+            PlantType newType = new PlantType();
+            newType.PType = plantType.info;
+
+            _context.PlantTypes.Add(newType);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlantType", new { id = plantType.PlantTypeID }, plantType);
+            return CreatedAtAction("GetPlantType", new { id = newType.PlantTypeID }, newType);
         }
 
         // DELETE: api/planttypes/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<PlantType>> DeletePlantType(int id)
-        {
+        {   //Delete a plant type at the ID
             var plantType = await _context.PlantTypes.FindAsync(id);
             if (plantType == null)
             {

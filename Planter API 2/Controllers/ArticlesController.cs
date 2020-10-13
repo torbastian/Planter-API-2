@@ -23,14 +23,14 @@ namespace Planter_API_2.Controllers
         // GET: api/articles/full
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
-        {
+        {   //Get everything from Articles
             return await _context.Articles.ToListAsync();
         }
 
         // GET: api/articles/full/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)
-        {
+        {   //Get everything from Articles at the id
             var article = await _context.Articles.FindAsync(id);
 
             if (article == null)
@@ -90,7 +90,7 @@ namespace Planter_API_2.Controllers
 
         [HttpGet("plant/{id}")]
         public async Task<ActionResult<ArticleDto>> GetArticleByPlantId(int id)
-        {
+        {   //Get an article based on its plant id
             var query = _context.Articles.Where(a => a.PlantsID == id)
                 .Include(a => a.ApprovedType)
                 .Select(a => new ArticleDto
@@ -111,7 +111,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutArticle(int id, Article article)
-        {
+        {   //Update an article
             if (id != article.ArticleID)
             {
                 return BadRequest();
@@ -143,7 +143,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
-        {
+        {   //Create a new article
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();
 
@@ -153,7 +153,7 @@ namespace Planter_API_2.Controllers
         // DELETE: api/articles/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Article>> DeleteArticle(int id)
-        {
+        {   //delete an article based on the ID
             var article = await _context.Articles.FindAsync(id);
             if (article == null)
             {

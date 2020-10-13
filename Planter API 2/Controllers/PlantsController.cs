@@ -24,14 +24,14 @@ namespace Planter_API_2.Controllers
         // GET: api/plants/full
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Plants>>> GetPlants()
-        {
+        {   //Get everything from plants
             return await _context.Plants.ToListAsync();
         }
 
         // GET: api/plants/full/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Plants>> GetPlants(int id)
-        {
+        {   //Get everything from plants at the ID
             var plants = await _context.Plants.FindAsync(id);
 
             if (plants == null)
@@ -46,7 +46,7 @@ namespace Planter_API_2.Controllers
         // OBS! Returns PlantsDto WITHOUT AN IMAGE, To get an image Use the GetPlantImage method
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsDto()
-        {
+        {   //Get all approved DTO plants
             var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
@@ -73,7 +73,7 @@ namespace Planter_API_2.Controllers
         // OBS! Returns PlantsDTO WITHOUT AN IMAGE, To get an image Use the GetPlantImage method
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantsDto>> GetPlantsDto(int id)
-        {
+        {   //Get the Plant DTO at the ID
             var query = _context.Plants.Where(p => p.PlantID == id)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
@@ -104,7 +104,7 @@ namespace Planter_API_2.Controllers
         // GET: api/plants/type/id
         [HttpGet("type/{id}")]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsbyType(int id)
-        {
+        {   //Get all plants of a specified type that are approved
             var query = _context.Plants.Where(p => p.FK_PlantTypeID == id && p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
@@ -130,7 +130,7 @@ namespace Planter_API_2.Controllers
         // GET: api/plants/climate/id
         [HttpGet("climate/{id}")]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByClimate(int id)
-        {
+        {   //Get all plants based on their climate that are approved
             var query = _context.Plants.Where(p => p.FK_ClimateID == id && p.FK_ApprovedTypeID == 1)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
@@ -156,7 +156,7 @@ namespace Planter_API_2.Controllers
         // GET: api/plants/latest
         [HttpGet("latest")]
         public async Task<ActionResult<PlantsDto>> GetLatestPlant()
-        {
+        {   //Get the latest approved plant
             var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == 1)
                 .OrderByDescending(p => p.PlantID)
                 .Include(p => p.PlantType)
@@ -183,7 +183,7 @@ namespace Planter_API_2.Controllers
         // GET: api/plants/approval/1
         [HttpGet("approval/{approvalType}")]
         public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByApproval(int approvalType)
-        {
+        {   //Get plants by their approval type
             var query = _context.Plants.Where(p => p.FK_ApprovedTypeID == approvalType)
                 .Include(p => p.PlantType)
                 .Include(p => p.Climates)
@@ -210,8 +210,8 @@ namespace Planter_API_2.Controllers
 
         [HttpPut("approval/{id}/{approvalType}")]
         public async Task<IActionResult> ApproveOrDisapprovePlant(int id, int approvalType)
-        {
-            var result = _context.Plants.SingleOrDefault(p => p.PlantID == id);
+        {   //update the approval of a plant
+            var result = await _context.Plants.SingleOrDefaultAsync(p => p.PlantID == id);
 
             if (result != null)
             {
@@ -228,7 +228,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlants(int id, Plants plants)
-        {
+        {   //Update a plant
             if (id != plants.PlantID)
             {
                 return BadRequest();
@@ -257,7 +257,7 @@ namespace Planter_API_2.Controllers
 
         [HttpGet("image/{id}")]
         public async Task<ActionResult<imagePlant>> GetPlantImage(int id)
-        {
+        {   //Get the image of a plant based on its id
             var plant = await _context.Plants.Where(p => p.PlantID == id).FirstOrDefaultAsync();
 
             if (plant == null)
@@ -265,6 +265,7 @@ namespace Planter_API_2.Controllers
                 return NotFound();
             }
 
+            //Convert the image from the database to a base64 string
             imagePlant rPlant = new imagePlant()
             {
                 id = id,
@@ -276,7 +277,7 @@ namespace Planter_API_2.Controllers
 
         [HttpPut("image/{id}")]
         public async Task<IActionResult> PutPlantImage(int id, imagePlant iPlant)
-        {
+        {   //Update the image of a plant
             var plant = _context.Plants.Where(p => p.PlantID == id).FirstOrDefault();
 
             if (plant == null || iPlant == null)
@@ -284,6 +285,7 @@ namespace Planter_API_2.Controllers
                 return BadRequest();
             }
 
+            //Convert the base64 string to bytes that can be stored on the database
             byte[] byteImage = Convert.FromBase64String(iPlant.image);
 
             plant.Image = byteImage;
@@ -297,7 +299,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Plants>> PostPlants(Plants plants)
-        {
+        {   //Create a new plant
             _context.Plants.Add(plants);
             await _context.SaveChangesAsync();
 
@@ -307,7 +309,7 @@ namespace Planter_API_2.Controllers
         // DELETE: api/plants/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Plants>> DeletePlants(int id)
-        {
+        {   //delete a plant at the id
             var plants = await _context.Plants.FindAsync(id);
             if (plants == null)
             {
@@ -328,7 +330,7 @@ namespace Planter_API_2.Controllers
 }
 
 public class imagePlant
-{
+{   //Used to transfer the image and id of a plant
     public int id { get; set; }
     public string image { get; set; }
 }

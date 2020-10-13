@@ -23,14 +23,14 @@ namespace Planter_API_2.Controllers
         // GET: api/comments/full
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Comments>>> GetComments()
-        {
+        {   //Get everything from comments
             return await _context.Comments.ToListAsync();
         }
 
         // GET: api/comments/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Comments>> GetComments(int id)
-        {
+        {   //Get everything from comments based on the ID
             var comments = await _context.Comments.FindAsync(id);
 
             if (comments == null)
@@ -43,7 +43,7 @@ namespace Planter_API_2.Controllers
 
         [HttpGet]
         public ActionResult GetCommentsDto()
-        {
+        {   //Dont get anything, why would you need to display ALL comments?
             return NotFound();
         }
 
@@ -71,7 +71,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComments(int id, Comments comments)
-        {
+        {   //Update a comment based on its id
             if (id != comments.CommentID)
             {
                 return BadRequest();
@@ -103,7 +103,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Comments>> PostComments(Comments comments)
-        {
+        {   //Create a new Comment
             _context.Comments.Add(comments);
             await _context.SaveChangesAsync();
 
@@ -113,7 +113,7 @@ namespace Planter_API_2.Controllers
         // DELETE: api/comments/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Comments>> DeleteComments(int id)
-        {
+        {   //Delete a comment based on its ID
             var comments = await _context.Comments.FindAsync(id);
             if (comments == null)
             {

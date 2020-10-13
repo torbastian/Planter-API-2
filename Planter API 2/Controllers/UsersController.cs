@@ -20,17 +20,19 @@ namespace Planter_API_2.Controllers
             _context = context;
         }
 
+        //none of this is implemented and is not expected to work
+
         // GET: api/users
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
-        {
+        {   //Get everything from users
             return await _context.Users.ToListAsync();
         }
 
         // GET: api/users/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Users>> GetUsers(int id)
-        {
+        {   //Get everything from users at the ID
             var users = await _context.Users.FindAsync(id);
 
             if (users == null)
@@ -43,7 +45,7 @@ namespace Planter_API_2.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsersDto>>> GetUsersDto()
-        {
+        {   //Get all users as DTO
             var query = _context.Users
                 .Include(u => u.UserType)
                 .Select(u => new UsersDto
@@ -60,7 +62,7 @@ namespace Planter_API_2.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UsersDto>> GetUsersDtoId(int id)
-        {
+        {   //Get a User DTO at the ID
             var query = _context.Users.Where(u => u.UserID == id)
                 .Include(u => u.UserType)
                 .Select(u => new UsersDto
@@ -84,6 +86,7 @@ namespace Planter_API_2.Controllers
         [HttpPost("/authenticate")]
         public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto user)
         {
+            //This does nothing, and it makes no sense
             //Recives User with only Username and Password Values
             var query = _context.Users
                 .Include(u => u.UserType)
@@ -110,7 +113,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsers(int id, Users users)
-        {
+        {   //Update a user at the ID
             if (id != users.UserID)
             {
                 return BadRequest();
@@ -142,7 +145,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Users>> PostUsers(Users users)
-        {
+        {   //Create a new user
             _context.Users.Add(users);
             await _context.SaveChangesAsync();
 
@@ -152,7 +155,7 @@ namespace Planter_API_2.Controllers
         // DELETE: api/users/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Users>> DeleteUsers(int id)
-        {
+        {   //Delete a user at the ID
             var users = await _context.Users.FindAsync(id);
             if (users == null)
             {

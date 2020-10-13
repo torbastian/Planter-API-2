@@ -23,14 +23,14 @@ namespace Planter_API_2.Controllers
         // GET: api/edible
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<Edible>>> GetEdibles()
-        {
+        {   //Get everything from edibles
             return await _context.Edibles.ToListAsync();
         }
 
         // GET: api/edible/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<Edible>> GetEdible(int id)
-        {
+        {   // Get everything from edibles based on the id
             var edible = await _context.Edibles.FindAsync(id);
 
             if (edible == null)
@@ -44,7 +44,7 @@ namespace Planter_API_2.Controllers
         // GET: api/edible
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EdibleDto>>> GetEdibleDto()
-        {
+        {   //Get all DTO of edibles
             var query = _context.Edibles.Select(e => new EdibleDto()
             {
                 id = e.EdibleID,
@@ -59,7 +59,7 @@ namespace Planter_API_2.Controllers
         // GET: api/edible/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EdibleDto>> GetEdibleDtoId(int id)
-        {
+        {   //Get everything about the edible DTO at the ID
             var edible = await _context.Edibles.FindAsync(id);
 
             if (edible == null)
@@ -74,50 +74,39 @@ namespace Planter_API_2.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEdible(int id, Edible edible)
-        {
-            if (id != edible.EdibleID)
-            {
-                return BadRequest();
-            }
+        public async Task<IActionResult> PutEdible(int id, EdibleDto edible)
+        {   //Update an edible value, at the Id with the information provided
+            var result = await _context.Edibles.SingleOrDefaultAsync(e => e.EdibleID == id);
 
-            _context.Entry(edible).State = EntityState.Modified;
-
-            try
+            if (result != null)
             {
+                result.EdibleS = edible.info;
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EdibleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok();
             }
 
-            return NoContent();
+            return NotFound();
         }
 
         // POST: api/edible
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Edible>> PostEdible(Edible edible)
-        {
-            _context.Edibles.Add(edible);
+        public async Task<ActionResult<Edible>> PostEdible(EdibleDto edible)
+        {   //Create a new edible value based on the DTO provided
+            Edible newEdible = new Edible();
+            newEdible.EdibleS = edible.info;
+
+            _context.Edibles.Add(newEdible);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEdible", new { id = edible.EdibleID }, edible);
+            return CreatedAtAction("GetEdible", new { id = newEdible.EdibleID }, newEdible);
         }
 
         // DELETE: api/edible/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Edible>> DeleteEdible(int id)
-        {
+        {   //Delete an edible value at the ID
             var edible = await _context.Edibles.FindAsync(id);
             if (edible == null)
             {

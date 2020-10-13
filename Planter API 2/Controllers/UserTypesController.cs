@@ -23,14 +23,14 @@ namespace Planter_API_2.Controllers
         // GET: api/usertypes/full
         [HttpGet("full")]
         public async Task<ActionResult<IEnumerable<UserType>>> GetUsertypes()
-        {
+        {   //Get everything from user types
             return await _context.Usertypes.ToListAsync();
         }
 
         // GET: api/usertypes/full/5
         [HttpGet("full/{id}")]
         public async Task<ActionResult<UserType>> GetUserType(int id)
-        {
+        {   //get everything from uset types at the id
             var userType = await _context.Usertypes.FindAsync(id);
 
             if (userType == null)
@@ -44,7 +44,7 @@ namespace Planter_API_2.Controllers
         // GET: api/usertype
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserTypeDto>>> GetUserTypeDto()
-        {
+        {   //get all user types as DTO
             var query = _context.Usertypes.Select(u => new UserTypeDto()
             {
                 id = u.UserTypeID,
@@ -59,7 +59,7 @@ namespace Planter_API_2.Controllers
         // GET: api/usertype/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserTypeDto>> GetUserTypeDtoId(int id)
-        {
+        {   //Get user type DTO at the ID
             var userType = await _context.Usertypes.FindAsync(id);
 
             if (userType == null)
@@ -75,7 +75,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserType(int id, UserType userType)
-        {
+        {   //Update a user type
             if (id != userType.UserTypeID)
             {
                 return BadRequest();
@@ -107,7 +107,7 @@ namespace Planter_API_2.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<UserType>> PostUserType(UserType userType)
-        {
+        {   //Create a new userType
             _context.Usertypes.Add(userType);
             await _context.SaveChangesAsync();
 
@@ -117,7 +117,7 @@ namespace Planter_API_2.Controllers
         // DELETE: api/usertypes/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<UserType>> DeleteUserType(int id)
-        {
+        {   //Delete a user type at the ID
             var userType = await _context.Usertypes.FindAsync(id);
             if (userType == null)
             {
