@@ -52,6 +52,7 @@ namespace Planter_API_2.Controllers
                 {
                     id = u.UserID,
                     username = u.Username,
+                    password = u.Password,
                     type = u.UserType.UType
                 });
 
@@ -69,6 +70,7 @@ namespace Planter_API_2.Controllers
                 {
                     id = u.UserID,
                     username = u.Username,
+                    password = u.Password,
                     type = u.UserType.UType
                 });
 
@@ -83,61 +85,60 @@ namespace Planter_API_2.Controllers
         }
 
         //HttpPost
-        [HttpPost("/authenticate")]
-        public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto user)
+        [HttpPost("auth")]
+        public async Task<ActionResult<UsersDto>> AuthenticateUser(UsersDto userDetails)
         {
-            //This does nothing, and it makes no sense
             //Recives User with only Username and Password Values
-            var query = _context.Users
-                .Include(u => u.UserType)
+            //Get the user that matches these and return it
+            if (userDetails.username == null || userDetails.password == null)
+            {
+                return BadRequest();
+            }
+
+            var query = _context.Users.Where(u => u.Username == userDetails.username)
                 .Select(u => new UsersDto
                 {
                     id = u.UserID,
+                    username = u.Username,
                     password = u.Password,
                     type = u.UserType.UType
                 });
-            //Get the user that matches these and return it
-            var login = await query.FirstOrDefaultAsync();
 
-            if (login == null)
+            var user = await query.FirstOrDefaultAsync();
+
+            //Return the user
+            //Password validation (TEMPORARY)
+            if (user == null)
             {
                 return NotFound();
             }
-            //Return the user
-            return login;
-            //The website then stores this user locally, so that they can stay signed in
+            else if (user.password == userDetails.password)
+            {
+                return user;
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // PUT: api/users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, Users users)
+        public async Task<IActionResult> PutUsers(int id, UsersDto user)
         {   //Update a user at the ID
-            if (id != users.UserID)
-            {
-                return BadRequest();
-            }
+            var result = await _context.Users.SingleOrDefaultAsync(u => u.UserID == id);
 
-            _context.Entry(users).State = EntityState.Modified;
-
-            try
+            if (result != null)
             {
+                result.Username = user.username;
+                result.Password = user.password;
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok();
             }
 
-            return NoContent();
+            return NotFound();
         }
 
         // POST: api/users

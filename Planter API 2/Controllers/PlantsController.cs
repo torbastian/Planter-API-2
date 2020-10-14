@@ -206,6 +206,31 @@ namespace Planter_API_2.Controllers
             return plants;
         }
 
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult<IEnumerable<PlantsDto>>> GetPlantsByUserId(int id)
+        {   //Get all plants belonging to a User
+            var query = _context.Plants.Where(p => p.FK_UserID == id)
+                .Include(p => p.PlantType)
+                .Include(p => p.Climates)
+                .Include(p => p.Edible)
+                .Include(P => P.Users)
+                .Include(p => p.ApprovedType)
+                .Select(p => new PlantsDto
+                {
+                    id = p.PlantID,
+                    info = p.PlantName,
+                    type = p.PlantType.PType,
+                    climate = p.Climates.Climate,
+                    edible = p.Edible.EdibleS,
+                    username = p.Users.Username,
+                    approved = p.ApprovedType.AType
+                });
+
+            var plants = await query.ToListAsync();
+
+            return plants;
+        }
+
         // PUT: api/plants/1/1
 
         [HttpPut("approval/{id}/{approvalType}")]
