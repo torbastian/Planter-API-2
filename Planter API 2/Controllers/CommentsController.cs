@@ -52,7 +52,7 @@ namespace Planter_API_2.Controllers
         public async Task<ActionResult<IEnumerable<CommentsDto>>> GetCommentsByArticleId(int id)
         {
             //Get a comment based on the article id
-            var query = _context.Comments.Where(c => c.CommentID == id)
+            var query = _context.Comments.Where(c => c.FK_ArticleID == id)
                 .Include(c => c.Users)
                 .Select(c => new CommentsDto
                 {
@@ -101,13 +101,18 @@ namespace Planter_API_2.Controllers
         // POST: api/comments
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Comments>> PostComments(Comments comments)
+        [HttpPost("{id}/{articleId}")]
+        public async Task<ActionResult<Comments>> PostComments(int id, int articleId, CommentsDto comment)
         {   //Create a new Comment
-            _context.Comments.Add(comments);
+            var _comment = new Comments();
+            _comment.FK_UserID = id;
+            _comment.FK_ArticleID = articleId;
+            _comment.Note = comment.info;
+
+            _context.Comments.Add(_comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetComments", new { id = comments.CommentID }, comments);
+            return CreatedAtAction("GetComments", new { id = _comment.CommentID }, _comment);
         }
 
         // DELETE: api/comments/5
