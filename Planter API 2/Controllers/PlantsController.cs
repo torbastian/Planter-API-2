@@ -325,10 +325,14 @@ namespace Planter_API_2.Controllers
         [HttpPost]
         public async Task<ActionResult<Plants>> PostPlants(Plants plants)
         {   //Create a new plant
-            _context.Plants.Add(plants);
+
+            Plants newPlant = plants;
+            newPlant.FK_ApprovedTypeID = 2;
+
+            _context.Plants.Add(newPlant);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlants", new { id = plants.PlantID }, plants);
+            return CreatedAtAction("GetPlants", new { id = newPlant.PlantID }, newPlant);
         }
 
         // DELETE: api/plants/5
