@@ -300,6 +300,22 @@ namespace Planter_API_2.Controllers
             return rPlant;
         }
 
+        [HttpGet("owner/{id}")]
+        public async Task<ActionResult<UsersDto>> GetOwnerOfPlant(int id)
+        {
+            var query = _context.Plants.Where(p => p.PlantID == id)
+                .Include(p => p.Users)
+                .Select(p => new UsersDto
+                {
+                    id = p.FK_UserID,
+                    username = p.Users.Username
+                });
+
+            var user = await query.FirstOrDefaultAsync();
+
+            return user;
+        }
+
         [HttpPut("image/{id}")]
         public async Task<IActionResult> PutPlantImage(int id, imagePlant iPlant)
         {   //Update the image of a plant
