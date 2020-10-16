@@ -144,6 +144,7 @@ namespace Planter_API_2.Controllers
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
         {   //Create a new article
+            article.ApprovedTypeID = 2;
             _context.Articles.Add(article);
             await _context.SaveChangesAsync();
 
